@@ -4,3 +4,4 @@ inputs:
     url: github:nixos/nixpkgs/nixos-unstable
 
 allowUnfree: true
+impure: true # for nix-ld
