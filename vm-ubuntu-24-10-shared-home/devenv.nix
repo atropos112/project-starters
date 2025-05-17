@@ -1,21 +1,22 @@
 {
   inputs,
   pkgs,
-  lib,
   config,
   ...
 }: let
-  pkgu = import inputs.nixpkgs-unstable {system = pkgs.stdenv.system;};
+  inherit (inputs.atrolib.lib) listScripts writeShellScript;
+  inherit (inputs.atrolib.lib.devenv.scripts) help;
   lima_yaml = ./lima.yaml;
 in {
-  packages = [
-    pkgu.lima
+  packages = with pkgs; [
+    lima
   ];
 
   scripts = {
+    help = help config.scripts;
     setup-vm = {
       description = "Setup a Lima VM";
-      exec = ''
+      exec = writeShellScript "setup-vm" ''
         if [ -z "$1" ]; then
           echo "Usage: $0 <name>"
           exit 1
@@ -27,7 +28,7 @@ in {
     };
     start-vm = {
       description = "Start a Lima VM";
-      exec = ''
+      exec = writeShellScript "start-vm" ''
         if [ -z "$1" ]; then
           echo "Usage: $0 <name>"
           exit 1
@@ -39,7 +40,7 @@ in {
     };
     remove-vm = {
       description = "Remove a Lima VM";
-      exec = ''
+      exec = writeShellScript "remove-vm" ''
         if [ -z "$1" ]; then
           echo "Usage: $0 <name>"
           exit 1
@@ -50,15 +51,5 @@ in {
     };
   };
 
-  enterShell = ''
-
-    # Scripts message
-    echo
-    echo 🦾 Useful project scripts:
-    echo 🦾
-    ${pkgs.gnused}/bin/sed -e 's| |••|g' -e 's|=| |' <<EOF | ${pkgs.util-linuxMinimal}/bin/column -t | ${pkgs.gnused}/bin/sed -e 's|^|🦾 |' -e 's|••| |g'
-    ${lib.generators.toKeyValue {} (lib.mapAttrs (_: value: value.description) config.scripts)}
-    EOF
-    echo
-  '';
+  enterShell = listScripts config.scripts;
 }

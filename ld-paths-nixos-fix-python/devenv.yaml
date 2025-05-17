@@ -1,10 +1,14 @@
+---
+# yaml-language-server: $schema=https://devenv.sh/devenv.schema.json
 inputs:
+  nixpkgs:
+    url: github:NixOS/nixpkgs/nixos-unstable
+  atrolib:
+    url: github:atropos112/atronixlib
   nixpkgs-python:
     url: github:cachix/nixpkgs-python
     inputs:
       nixpkgs:
         follows: nixpkgs
-  nixpkgs-unstable:
-    url: github:nixos/nixpkgs/nixos-unstable
 allowUnfree: true
-impure: true
+impure: true # For NIX_LD which may or may not be necessary itself.

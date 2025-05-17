@@ -1,0 +1,3 @@
+/home/atropos/projects/starters/ld-paths-nixos-fix/devenv.lock
+/home/atropos/projects/starters/ld-paths-nixos-fix/devenv.nix
+/home/atropos/projects/starters/ld-paths-nixos-fix/devenv.yaml
